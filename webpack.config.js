@@ -38,7 +38,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      filename: 'client.html',
+      filename: 'client.ejs',
       inject: true,
       template: 'src/client.html',
       chunks: ['client']

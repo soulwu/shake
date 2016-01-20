@@ -8,19 +8,23 @@ const server = http.Server(app);
 const io = IO(server);
 
 app.use(express.static('dist'));
+app.set('views', `${__dirname}/dist`);
+app.set('view engine', 'ejs');
 
 app.get('/client', (req, res) => {
   const code = req.query.code;
+  console.log(code);
   if (!code) {
-    res.redirect(nwo.createURL('wx56c006e34bb90b4c', 'http://s.dmatou.com/client', '', 1));
+    res.redirect(nwo.createURL('wx56c006e34bb90b4c', `${req.protocol}://${req.hostname}/client`, '', 1));
     return;
   }
 
-  nwo.success({id: 'wx56c006e34bb90b4c', secret: 'bb0a1e600fba93e0d10f15ab6410944b'}, code, (error, body) => {
+  nwo.success({id: 'wx56c006e34bb90b4c', secret: '32981a4ced0b006298fcd1ba96189ce4'}, code, (error, body) => {
     if (!error) {
       nwo.profile(body.openid, body.access_token, (error, body) => {
-        console.log(body);
-        res.sendFile(`${__dirname}/dist/client.html`);
+        if (!error) {
+          res.render('client', {nickname: body.nickname});
+        }
       });
     }
   })
