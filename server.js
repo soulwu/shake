@@ -12,11 +12,11 @@ app.use(express.static('dist'));
 app.get('/client', (req, res) => {
   const code = req.params.code;
   if (!code) {
-    res.redirect(nwo.createURL('wx37f5749fa1a25267', 'http://s.dmatou.com/client', '', 1));
+    res.redirect(nwo.createURL('wx56c006e34bb90b4c', 'http://s.dmatou.com/client', '', 1));
     return;
   }
 
-  nwo.success({id: 'wx37f5749fa1a25267', secret: 'bb0a1e600fba93e0d10f15ab6410944b'}, code, (error, body) => {
+  nwo.success({id: 'wx56c006e34bb90b4c', secret: 'bb0a1e600fba93e0d10f15ab6410944b'}, code, (error, body) => {
     if (!error) {
       nwo.profile(body.openid, body.access_token, (error, body) => {
         console.log(body);
