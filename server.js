@@ -13,7 +13,6 @@ app.set('view engine', 'ejs');
 
 app.get('/client', (req, res) => {
   const code = req.query.code;
-  console.log(code);
   if (!code) {
     res.redirect(nwo.createURL('wx56c006e34bb90b4c', `${req.protocol}://${req.hostname}/client`, '', 1));
     return;
@@ -23,7 +22,10 @@ app.get('/client', (req, res) => {
     if (!error) {
       nwo.profile(body.openid, body.access_token, (error, body) => {
         if (!error) {
-          res.render('client', {nickname: body.nickname});
+          res.render('client', {
+            openId: body.openid,
+            nickname: body.nickname
+          });
         }
       });
     }
@@ -62,21 +64,26 @@ const monitor = io.of('/monitor').on('connection', (socket) => {
 });
 
 const client = io.of('/client').on('connection', (socket) => {
+  let id;
   let name;
   socket.on('join', (message) => {
+    id = message.id;
     name = message.name;
-    if (!name || !/^\S+$/.test(name)) {
+    if (!id || !name) {
       socket.emit('errored', {error: '昵称不合法'});
-    } else if (online.indexOf(name) !== -1) {
+    } else if (online.indexOf(id) !== -1) {
       socket.emit('errored', {error: '昵称已存在'});
     } else {
-      online.push(name);
-      socket.emit('joined', {name});
+      online.push(id);
+      socket.emit('joined', {
+        id,
+        name
+      });
       emitSync(monitor);
     }
   });
   socket.on('disconnect', () => {
-    const index = online.indexOf(name);
+    const index = online.indexOf(id);
     online.splice(index, 1);
     emitSync(monitor);
   });
@@ -84,13 +91,14 @@ const client = io.of('/client').on('connection', (socket) => {
     if (started) {
       let score;
       for (let s of scores) {
-        if (s.name === name) {
+        if (s.id === id) {
           score = s;
           break;
         }
       }
       if (!score) {
         score = {
+          id,
           name,
           count: 0
         };

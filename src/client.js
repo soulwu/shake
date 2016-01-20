@@ -6,7 +6,8 @@ import './styles/client.css';
 
 class Client extends Component {
   static defaultProps = {
-    name: window.nickname
+    id: '',
+    name: ''
   };
 
   constructor(props) {
@@ -24,7 +25,10 @@ class Client extends Component {
     const socket = io.connect('/client');
     this.socket = socket;
     socket.on('connect', () => {
-      this.socket.emit('join', {name: this.props.name});
+      this.socket.emit('join', {
+        id: this.props.id,
+        name: this.props.name
+      });
       this.setState({
         connected: true
       });
@@ -109,4 +113,4 @@ class Client extends Component {
   }
 }
 
-render(<Client />, document.getElementById('client'));
+render(<Client id={window.openId} name={window.nickname} />, document.getElementById('client'));
