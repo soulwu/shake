@@ -10,7 +10,7 @@ const io = IO(server);
 app.use(express.static('dist'));
 
 app.get('/client', (req, res) => {
-  const code = req.params.code;
+  const code = req.query.code;
   if (!code) {
     res.redirect(nwo.createURL('wx56c006e34bb90b4c', 'http://s.dmatou.com/client', '', 1));
     return;
