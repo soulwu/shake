@@ -1,7 +1,8 @@
-import 'babel-polyfill';
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import io from 'socket.io-client';
+
+import './styles/client.css';
 
 class Client extends Component {
   constructor(props) {
@@ -89,25 +90,29 @@ class Client extends Component {
 
   render() {
     if (!window.DeviceMotionEvent || !this.state.connected) {
-        return null;
-    }
-
-    if (!this.state.joined) {
-      return (
-        <div>
-          {this.state.error && (<div>{this.state.error}</div>)}
-          <label>请输入你的姓名</label>
-          <input name="name" ref="name" />
-          <button onClick={this.onJoinClick}>立即加入</button>
-        </div>
-      );
+      return null;
     }
 
     return (
-      <div>
-        {this.state.error && (<div>{this.state.error}</div>)}
-        <div>{this.state.name}已加入</div>
-        <div>当前计数：{this.state.count}</div>
+      <div className="action">
+        {this.state.error && (
+          <div>{this.state.error}</div>
+        )}
+        {!this.state.joined && (
+          <div>
+            <input name="name" ref="name" placeholder="请输入你的昵称" />
+            <button onClick={this.onJoinClick}>加入!</button>
+          </div>
+        )}
+        {this.state.joined && !this.state.started && (
+          <p>{this.state.name}加入成功，活动马上开始！<br />请关注<strong>美丽的主持人</strong>和大屏幕。</p>
+        )}
+        {this.state.joined && this.state.started && (
+          <div>
+            <p><strong>活动开始</strong>！摇起你的手机！</p>
+            <div className="lu"><span>已摇</span>{this.state.count}<span>次</span></div>
+          </div>
+        )}
       </div>
     );
   }

@@ -1,0 +1,12 @@
+{
+  "apps": [
+    {
+      "name": "shake",
+      "cwd": "/data/adam/shake",
+      "script": "npm start",
+      "min_uptime": "60s",
+      "exec_mode": "cluster",
+      "instances": 0
+    }
+  ]
+}

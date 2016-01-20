@@ -1,4 +1,3 @@
-import 'babel-polyfill';
 import React, {Component} from 'react';
 import {render} from 'react-dom';
 import io from 'socket.io-client';
@@ -22,9 +21,7 @@ class Monitor extends Component {
     const socket = io.connect('/monitor');
 
     socket.on('sync', (message) => {
-      const scores = _.sortBy(_.toPairs(message.shaking), (o) => {
-        return 0 - o[1];
-      });
+      const scores = _.reverse(_.sortBy(message.scores, 'count'));
       this.setState({
         online: message.online,
         started: message.started,
@@ -86,23 +83,23 @@ class Monitor extends Component {
   };
 
   renderTopThree() {
-    const [first = [], second = [], third = []] = this.state.scores;
+    const [first = {}, second = {}, third = {}] = this.state.scores;
     return (
       <div className="top_rank">
         <div className="top">
           <p className="rank">第一名</p>
-          <p className="name">{first[0]}</p>
-          <p className="lu">{first[1]}</p>
+          <p className="name">{first.name}</p>
+          <p className="lu">{first.count}</p>
         </div>
         <div className="top">
           <p className="rank">第二名</p>
-          <p className="name">{second[0]}</p>
-          <p className="lu">{second[1]}</p>
+          <p className="name">{second.name}</p>
+          <p className="lu">{second.count}</p>
         </div>
         <div className="top">
           <p className="rank">第三名</p>
-          <p className="name">{third[0]}</p>
-          <p className="lu">{third[1]}</p>
+          <p className="name">{third.name}</p>
+          <p className="lu">{third.count}</p>
         </div>
       </div>
     );
@@ -110,13 +107,12 @@ class Monitor extends Component {
 
   renderRest() {
     const rest = [];
-    const scores = this.state.scores;
-    for (let i = 2; i < scores.length; i++) {
-      const score = scores[i];
+    const scores = this.state.scores.slice(3);
+    for (let score of scores) {
       const item = (
         <li key={i}>
-          <p>{score[0]}</p>
-          <p>{score[1]}</p>
+          <p>{score.name}</p>
+          <p>{score.count}</p>
         </li>
       );
       rest.push(item);

@@ -1,6 +1,7 @@
 import express from 'express';
 import http from 'http';
 import IO from 'socket.io';
+import nwo from 'node-weixin-oauth';
 
 const app = express();
 const server = http.Server(app);
@@ -8,15 +9,32 @@ const io = IO(server);
 
 app.use(express.static('dist'));
 
-const online = {};
-let shaking = {};
+app.get('/client', (req, res) => {
+  const code = req.params.code;
+  if (!code) {
+    res.redirect(nwo.createURL('wx37f5749fa1a25267', 'http://s.dmatou.com/client', '', 1));
+    return;
+  }
+
+  nwo.success({id: 'wx37f5749fa1a25267', secret: 'bb0a1e600fba93e0d10f15ab6410944b'}, code, (error, body) => {
+    if (!error) {
+      nwo.profile(body.openid, body.access_token, (error, body) => {
+        console.log(body);
+        res.sendFile(`${__dirname}/dist/client.html`);
+      });
+    }
+  })
+});
+
+const online = [];
+const scores = [];
 let started = false;
 
 const emitSync = (socket, params) => {
   socket.emit('sync', Object.assign({
-    online: Object.keys(online).length,
+    online: online.length,
     started,
-    shaking
+    scores
   }, params));
 };
 
@@ -34,7 +52,7 @@ const monitor = io.of('/monitor').on('connection', (socket) => {
   });
   socket.on('reset', () => {
     started = false;
-    shaking = {};
+    scores.splice(0, scores.length);
     emitSync(monitor);
   });
 });
@@ -45,26 +63,38 @@ const client = io.of('/client').on('connection', (socket) => {
     name = message.name;
     if (!name || !/^\S+$/.test(name)) {
       socket.emit('errored', {error: '昵称不合法'});
-    } else if (name in online) {
+    } else if (online.indexOf(name) !== -1) {
       socket.emit('errored', {error: '昵称已存在'});
     } else {
-      online[name] = true;
+      online.push(name);
       socket.emit('joined', {name});
       emitSync(monitor);
     }
   });
   socket.on('disconnect', () => {
-    delete online[name];
+    const index = online.indexOf(name);
+    online.splice(index, 1);
     emitSync(monitor);
   });
   socket.on('shaked', () => {
     if (started) {
-      if (!(name in shaking)) {
-        shaking[name] = 0;
+      let score;
+      for (let s of scores) {
+        if (s.name === name) {
+          score = s;
+          break;
+        }
       }
-      shaking[name]++;
+      if (!score) {
+        score = {
+          name,
+          count: 0
+        };
+        scores.push(score);
+      }
+      score.count++;
       emitSync(monitor);
-      socket.emit('shaked', {count: shaking[name]});
+      socket.emit('shaked', score);
     }
   });
 });

@@ -1,0 +1,28 @@
+*{margin:0; padding:0;}
+html{height: 100%;}
+body{
+    background:url(mbg.png) no-repeat top center;
+    background-size:100% 100%;
+    height: 100%;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+}
+.action{
+    width: 57%;
+    position: fixed;
+    bottom: 14%;
+    left:50%;
+    margin-left: -28.5%;
+}
+.action input{background-color:#fff; font-size: 22px; margin-bottom: 5px;
+    width: 100%;
+    height: 42px;
+    border: 0;
+    padding: 0 5px;
+    box-sizing: border-box;}
+.action button{ display: block; width: 100%; height: 38px; background-color: #ffd219; font-size: 20px; border: 2px solid #C7A413}
+.action p{text-align: center;font-size: 15px; font-weight: bold; color: #fff;   text-shadow: 1px 0 0 #ee3614,-1px 0 0 #ee3614,0 1px 0 #ee3614,0 -1px 0 #ee3614;
+}
+.action p strong{color:#ffd219;}
+.action .lu{text-align: center; font-size: 70px; color: #ffd219;  text-shadow: 1px 0 0 #ee3614,-1px 0 0 #ee3614,0 1px 0 #ee3614,0 -1px 0 #ee3614; vertical-align: middle;line-height: 1;}
+.action .lu span{font-size: 16px;color: #fff; vertical-align: middle;}
