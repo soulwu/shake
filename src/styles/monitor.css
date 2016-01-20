@@ -1,6 +1,6 @@
 *{margin: 0; padding:0;}
 body{
-    background:url(./bg.png) no-repeat top center #05152e;
+    background:url(bg.png) no-repeat top center #05152e;
     background-size: auto;
 }
 .content{
@@ -43,6 +43,7 @@ body{
     line-height: 1em;
     width: 100%;
     color: #fff;
+    overflow: hidden;
 }
 .top_rank .top p.lu{
     top: 61%;
@@ -90,9 +91,8 @@ body{
 .btn{ width: 240px; height: 60px; border-radius: 10px; background-color:#ffd800; color: #000; text-align: center; line-height: 60px;border:none; font-size: 28px; font-weight: bold; margin: 0 auto; display: block;}
 .on{
     width: 155px;
-    border-width: 0 6px 6px 6px;
-    border-style: solid;
-    border-color: #fff;
+    border: 6px solid #fff;
+    border-top-width: 0;
     background-color: #362552;
     position: absolute;
     top: 0;

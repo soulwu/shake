@@ -3,9 +3,9 @@ import {render} from 'react-dom';
 import io from 'socket.io-client';
 import _ from 'lodash';
 
-import './monitor.css';
+import './styles/monitor.css';
 
-class Root extends Component {
+class Monitor extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -21,7 +21,9 @@ class Root extends Component {
     const socket = io.connect('/monitor');
 
     socket.on('sync', (message) => {
-      const scores = _.reverse(_.sortBy(_.toPairs(message.shaking), 2));
+      const scores = _.sortBy(_.toPairs(message.shaking), (o) => {
+        return 0 - o[1];
+      });
       this.setState({
         online: message.online,
         started: message.started,
@@ -152,4 +154,4 @@ class Root extends Component {
   }
 }
 
-render(<Root />, document.getElementById('root'));
+render(<Monitor />, document.getElementById('monitor'));

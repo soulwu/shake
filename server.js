@@ -43,7 +43,7 @@ const client = io.of('/client').on('connection', (socket) => {
   let name;
   socket.on('join', (message) => {
     name = message.name;
-    if (!name || !/^[a-zA-Z0-9_u4e00-u9fa5]+$/.test(name)) {
+    if (!name || !/^\S+$/.test(name)) {
       socket.emit('errored', {error: '昵称不合法'});
     } else if (name in online) {
       socket.emit('errored', {error: '昵称已存在'});
@@ -64,6 +64,7 @@ const client = io.of('/client').on('connection', (socket) => {
       }
       shaking[name]++;
       emitSync(monitor);
+      socket.emit('shaked', {count: shaking[name]});
     }
   });
 });

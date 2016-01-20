@@ -1,12 +1,10 @@
-'use strict';
+var path = require('path');
+var webpack = require('webpack');
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
+var HtmlWebpackPlugin = require('html-webpack-plugin');
 
-const path = require('path');
-const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-
-const srcPath = path.join(__dirname, 'src');
-const distPath = path.join(__dirname, 'dist');
+var srcPath = path.join(__dirname, 'src');
+var distPath = path.join(__dirname, 'dist');
 
 module.exports = {
   entry: {

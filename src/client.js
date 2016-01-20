@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {render} from 'react-dom';
 import io from 'socket.io-client';
 
-class Root extends Component {
+class Client extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -39,6 +39,11 @@ class Root extends Component {
         started: false
       });
     });
+    socket.on('shaked', (message) => {
+      this.setState({
+        count: message.count
+      });
+    });
     socket.on('errored', (message) => {
       this.setState({
         error: message.error
@@ -53,40 +58,32 @@ class Root extends Component {
   }
 
   deviceMotion() {
-    const SHAKE_THRESHOLD = 5000;
-    let last_update = 0;
-    let last_x, last_y, last_z;
+    const speed = 25;
+    let last_x = 0;
+    let last_y = 0;
+    let last_z = 0;
 
     return (eventData) => {
-      const curTime = new Date().getTime();
-      if ((curTime - last_update) > 100) {
-        const diffTime = curTime - last_update;
-        last_update = curTime;
-        const {x, y, z} = eventData.accelerationIncludingGravity;
-        const speed = Math.abs(x + y + z - last_x - last_y - last_z) / diffTime * 10000;
-        [last_x, last_y, last_z] = [x, y, z];
-        if (speed > SHAKE_THRESHOLD) {
-          this.socket.emit('shaked');
-          this.setState({
-            count: this.state.count + 1
-          });
-        }
+      const {x, y, z} = eventData.accelerationIncludingGravity;
+      if (Math.abs(x - last_x) > speed || Math.abs(y - last_y) > speed || Math.abs(z - last_z) > speed) {
+        this.socket.emit('shaked');
       }
+      [last_x, last_y, last_z] = [x, y, z];
     };
   }
 
   onNameChange = (e) => {
     const value = e.target.value;
-    if (/^\S*$/.test(value)) {
-      this.setState({
-        name: e.target.value
-      });
-    }
+    this.setState({
+      name: value.replace(/\s/g, '')
+    });
   };
 
   onJoinClick = (e) => {
     e.preventDefault();
-    this.socket.emit('join', {name: this.state.name});
+    if (this.refs.name.value) {
+      this.socket.emit('join', {name: this.refs.name.value});
+    }
   };
 
   render() {
@@ -99,7 +96,7 @@ class Root extends Component {
         <div>
           {this.state.error && (<div>{this.state.error}</div>)}
           <label>请输入你的姓名</label>
-          <input name="name" value={this.state.name} onChange={this.onNameChange} />
+          <input name="name" ref="name" />
           <button onClick={this.onJoinClick}>立即加入</button>
         </div>
       );
@@ -115,4 +112,4 @@ class Root extends Component {
   }
 }
 
-render(<Root />, document.getElementById('root'));
+render(<Client />, document.getElementById('client'));
