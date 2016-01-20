@@ -5,13 +5,16 @@ import io from 'socket.io-client';
 import './styles/client.css';
 
 class Client extends Component {
+  static defaultProps = {
+    name: window.nickname
+  };
+
   constructor(props) {
     super(props);
     this.state = {
       connected: false,
       joined: false,
       started: false,
-      name: '',
       count: 0,
       error: ''
     };
@@ -21,6 +24,7 @@ class Client extends Component {
     const socket = io.connect('/client');
     this.socket = socket;
     socket.on('connect', () => {
+      this.socket.emit('join', {name: this.props.name});
       this.setState({
         connected: true
       });
@@ -74,13 +78,6 @@ class Client extends Component {
     };
   }
 
-  onNameChange = (e) => {
-    const value = e.target.value;
-    this.setState({
-      name: value.replace(/\s/g, '')
-    });
-  };
-
   onJoinClick = (e) => {
     e.preventDefault();
     if (this.refs.name.value) {
@@ -98,14 +95,8 @@ class Client extends Component {
         {this.state.error && (
           <div>{this.state.error}</div>
         )}
-        {!this.state.joined && (
-          <div>
-            <input name="name" ref="name" placeholder="请输入你的昵称" />
-            <button onClick={this.onJoinClick}>加入!</button>
-          </div>
-        )}
         {this.state.joined && !this.state.started && (
-          <p>{this.state.name}加入成功，活动马上开始！<br />请关注<strong>美丽的主持人</strong>和大屏幕。</p>
+          <p>{this.props.name}加入成功，活动马上开始！<br />请关注<strong>美丽的主持人</strong>和大屏幕。</p>
         )}
         {this.state.joined && this.state.started && (
           <div>
