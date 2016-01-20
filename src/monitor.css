@@ -1,0 +1,105 @@
+*{margin: 0; padding:0;}
+body{
+    background:url(./bg.png) no-repeat top center #05152e;
+    background-size: auto;
+}
+.content{
+    padding-top:220px;
+    min-width: 800px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+.top_rank{
+    width: 100%;
+    text-align: center;
+    margin-bottom: 40px;
+}
+.top_rank .top{
+    width: 30%;
+    padding-top:30%;
+    display: inline-block;
+    border-radius: 50%;
+    border:6px solid #ffd800;
+    position: relative;
+}
+.top_rank .top p{
+    position: absolute;
+    left: 50%;
+    font-weight: bold;
+    -webkit-transform:translate(-50%,0);
+}
+.top_rank .top p.rank{
+    top: 10%;
+    font-size: 18px;
+    line-height: 1em;
+    padding-bottom: 5px;
+    color: #ffdc36;
+    width: 60%;
+    border-bottom: 2px solid #ffdc36;
+}
+.top_rank .top p.name{
+    top: 30%;
+    font-size:78px;
+    line-height: 1em;
+    width: 100%;
+    color: #fff;
+}
+.top_rank .top p.lu{
+    top: 61%;
+    font-size:60px;
+    line-height: 1em;
+    width: 100%;
+    color: #fff;
+}
+@media screen and (min-width: 900px) {
+    .top_rank .top p.rank{font-size:20px;}
+    .top_rank .top p.name{font-size:88px;}
+    .top_rank .top p.lu{font-size:70px;}
+}
+@media screen and (min-width: 1000px) {
+    .top_rank .top p.rank{font-size:24px;}
+    .top_rank .top p.name{font-size:98px;}
+    .top_rank .top p.lu{font-size:80px;}
+}
+@media screen and (min-width: 1300px) {
+    .top_rank .top p.rank{font-size:28px;}
+    .top_rank .top p.name{font-size:118px;}
+    .top_rank .top p.lu{font-size:120px;}
+}
+.content ul{
+    width: 100%;
+    overflow: hidden;
+    border:1px solid rgba(255,255,255,0.3);
+    margin-bottom: 40px;
+}
+.content ul li{
+    width: 5%;
+    overflow: hidden;
+    white-space:nowrap;
+    float: left;
+    list-style: none;
+    font-size: 14px;
+    line-height: 1em;
+    color: #fff;
+    text-align: center;
+    height: 28px;
+    padding: 10px 0;
+    border-bottom:1px solid rgba(255,255,255,0.3);
+
+}
+.btn{ width: 240px; height: 60px; border-radius: 10px; background-color:#ffd800; color: #000; text-align: center; line-height: 60px;border:none; font-size: 28px; font-weight: bold; margin: 0 auto; display: block;}
+.on{
+    width: 155px;
+    border-width: 0 6px 6px 6px;
+    border-style: solid;
+    border-color: #fff;
+    background-color: #362552;
+    position: absolute;
+    top: 0;
+    right: 10px;
+    text-align: center;
+    color: #fcd600;
+    padding-top: 10px;
+}
+.on p{font-size: 22px;line-height: 1em;}
+.on strong{	font-size: 76px;line-height: 1em;}

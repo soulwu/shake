@@ -1,0 +1,61 @@
+<html>
+<head>
+<title>摇一摇</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
+</head>
+<body>
+<div id="content"></div>
+<script src="http://code.jquery.com/jquery-2.2.0.min.js"></script>
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/template" id="itemTpl">
+<div class="item" data-name={{name}}>
+  <span class="name">{{name}}:</span>
+  <span class="count">0</span>
+  <button data-name={{name}} class="reset">重置</button>
+</div>
+</script>
+<script>
+var tpl = $('#itemTpl').html();
+var $content = $('#content');
+
+$content.on('click', 'button.reset', function() {
+  var name = $(this).data('name');
+  incrCount(name, true);
+});
+
+var socket = io.connect('http://10.4.54.26:8080/index');
+socket.on('sync', function(message) {
+  var online = message.online;
+  Object.keys(online).forEach(function(name) {
+    renderItem(name);
+  });
+});
+socket.on('join', function(message) {
+  var name = message.name;
+  renderItem(name);
+});
+socket.on('quit', function(message) {
+  var name = message.name;
+  $('.item[data-name=' + name + ']').remove();
+});
+socket.on('incr', function(message) {
+  var name = message.name;
+  incrCount(name);
+});
+
+function renderItem(name) {
+  $(tpl.replace(/\{\{name\}\}/g, name)).appendTo($content);
+}
+
+function incrCount(name, reset) {
+  var $count = $('.item[data-name=' + name + '] .count');
+  if (!reset) {
+    $count.html((parseInt($count.html(), 10) || 0) + 1);
+  } else {
+    $count.html(0);
+  }
+}
+</script>
+</body>
+</html>
