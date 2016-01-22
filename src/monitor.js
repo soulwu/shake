@@ -108,7 +108,9 @@ class Monitor extends Component {
   renderRest() {
     const rest = [];
     const scores = this.state.scores.slice(3);
+    let i = 0;
     for (let score of scores) {
+      i++;
       const item = (
         <li key={i}>
           <p>{score.name}</p>
