@@ -2,7 +2,7 @@
   "apps": [
     {
       "name": "shake",
-      "cwd": "/data/adam/shake",
+      "cwd": "/data/wwwroot/shake",
       "script": "./node_modules/.bin/babel-node",
       "args": ["server.js"],
       "min_uptime": "60s",
