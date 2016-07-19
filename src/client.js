@@ -1,10 +1,17 @@
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {render} from 'react-dom';
 import io from 'socket.io-client';
 
 import './styles/client.css';
 
 class Client extends Component {
+  static displayName = 'Client';
+
+  static propTypes = {
+    id: PropTypes.string,
+    name: PropTypes.string
+  };
+
   static defaultProps = {
     id: '',
     name: ''
@@ -69,25 +76,18 @@ class Client extends Component {
 
   deviceMotion() {
     const speed = 25;
-    let last_x = 0;
-    let last_y = 0;
-    let last_z = 0;
+    let lastX = 0;
+    let lastY = 0;
+    let lastZ = 0;
 
     return (eventData) => {
       const {x, y, z} = eventData.accelerationIncludingGravity;
-      if (Math.abs(x - last_x) > speed || Math.abs(y - last_y) > speed || Math.abs(z - last_z) > speed) {
+      if (Math.abs(x - lastX) > speed || Math.abs(y - lastY) > speed || Math.abs(z - lastZ) > speed) {
         this.socket.emit('shaked');
       }
-      [last_x, last_y, last_z] = [x, y, z];
+      [lastX, lastY, lastZ] = [x, y, z];
     };
   }
-
-  onJoinClick = (e) => {
-    e.preventDefault();
-    if (this.refs.name.value) {
-      this.socket.emit('join', {name: this.refs.name.value});
-    }
-  };
 
   render() {
     if (!window.DeviceMotionEvent || !this.state.connected) {

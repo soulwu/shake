@@ -5,7 +5,7 @@ import nwo from 'node-weixin-oauth';
 
 const app = express();
 const server = http.Server(app);
-const io = IO(server);
+const io = new IO(server);
 
 app.use(express.static('dist'));
 app.set('views', `${__dirname}/dist`);
@@ -29,39 +29,25 @@ app.get('/client', (req, res) => {
         }
       });
     }
-  })
+  });
 });
 
 const online = [];
 const scores = [];
 let started = false;
 
+let monitor = null;
+
 const emitSync = (socket, params) => {
+  if (!socket) {
+    return;
+  }
   socket.emit('sync', Object.assign({
     online: online.length,
     started,
     scores
   }, params));
 };
-
-const monitor = io.of('/monitor').on('connection', (socket) => {
-  emitSync(socket);
-  socket.on('start', () => {
-    started = true;
-    client.emit('started');
-    emitSync(monitor);
-  });
-  socket.on('stop', () => {
-    started = false;
-    client.emit('stoped');
-    emitSync(monitor);
-  });
-  socket.on('reset', () => {
-    started = false;
-    scores.splice(0, scores.length);
-    emitSync(monitor);
-  });
-});
 
 const client = io.of('/client').on('connection', (socket) => {
   let id;
@@ -90,7 +76,7 @@ const client = io.of('/client').on('connection', (socket) => {
   socket.on('shaked', () => {
     if (started) {
       let score;
-      for (let s of scores) {
+      for (const s of scores) {
         if (s.id === id) {
           score = s;
           break;
@@ -105,8 +91,43 @@ const client = io.of('/client').on('connection', (socket) => {
         scores.push(score);
       }
       score.count++;
-      emitSync(monitor);
       socket.emit('shaked', score);
+    }
+  });
+});
+
+monitor = io.of('/monitor').on('connection', (socket) => {
+  let timer = null;
+  emitSync(socket);
+  socket.on('start', () => {
+    started = true;
+    client.emit('started');
+    emitSync(monitor);
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+    timer = setInterval(() => {
+      emitSync(monitor);
+    }, 5000);
+  });
+  socket.on('stop', () => {
+    started = false;
+    client.emit('stoped');
+    emitSync(monitor);
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  });
+  socket.on('reset', () => {
+    started = false;
+    scores.splice(0, scores.length);
+    emitSync(monitor);
+    clearInterval(timer);
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
     }
   });
 });

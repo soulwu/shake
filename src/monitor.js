@@ -6,6 +6,8 @@ import _ from 'lodash';
 import './styles/monitor.css';
 
 class Monitor extends Component {
+  static displayName = 'Monitor';
+
   constructor(props) {
     super(props);
     this.state = {
@@ -109,7 +111,7 @@ class Monitor extends Component {
     const rest = [];
     const scores = this.state.scores.slice(3);
     let i = 0;
-    for (let score of scores) {
+    for (const score of scores) {
       i++;
       const item = (
         <li key={i}>
