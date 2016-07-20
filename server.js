@@ -110,7 +110,7 @@ monitor = io.of('/monitor').on('connection', (socket) => {
     }
     timer = setInterval(() => {
       emitSync(monitor);
-    }, 5000);
+    }, 1000);
   });
   socket.on('stop', () => {
     started = false;
