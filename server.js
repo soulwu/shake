@@ -22,6 +22,7 @@ app.get('/client', (req, res) => {
     if (!error) {
       nwo.profile(body.openid, body.access_token, (error, body) => {
         if (!error) {
+          console.log(body);
           res.render('client', {
             openId: body.openid,
             nickname: body.nickname

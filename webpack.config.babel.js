@@ -1,10 +1,10 @@
-var path = require('path');
-var webpack = require('webpack');
-var ExtractTextPlugin = require('extract-text-webpack-plugin');
-var HtmlWebpackPlugin = require('html-webpack-plugin');
+import path from 'path';
+import webpack from 'webpack';
+import ExtractTextPlugin from 'extract-text-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
 
-var srcPath = path.join(__dirname, 'src');
-var distPath = path.join(__dirname, 'dist');
+const srcPath = path.join(__dirname, 'src');
+const distPath = path.join(__dirname, 'dist');
 
 module.exports = {
   entry: {
@@ -33,6 +33,10 @@ module.exports = {
       {
         test: /\.css$/,
         loader: ExtractTextPlugin.extract('style-loader', 'css-loader')
+      },
+      {
+        test: /\.html$/,
+        loader: 'html-loader'
       }
     ]
   },
