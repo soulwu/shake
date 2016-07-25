@@ -58,7 +58,7 @@ class Monitor extends Component {
 
   shakingCountDown() {
     this.setState({
-      leftTime: 600
+      leftTime: 300
     });
 
     let interval = setInterval(() => {
