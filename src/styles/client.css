@@ -1,18 +1,17 @@
 *{margin:0; padding:0;}
 html{height: 100%;}
 body{
-    background:url(mbg.png) no-repeat top center;
-    background-size:100% 100%;
+    background:url(mbg.jpg) no-repeat top center;
+    background-size:100% auto;
     height: 100%;
     -webkit-tap-highlight-color: transparent;
     -webkit-font-smoothing: antialiased;
 }
 .action{
-    width: 57%;
+    width: 100%;
     position: fixed;
     bottom: 14%;
-    left:50%;
-    margin-left: -28.5%;
+    left: 0;
 }
 .action input{background-color:#fff; font-size: 22px; margin-bottom: 5px;
     width: 100%;
@@ -21,8 +20,7 @@ body{
     padding: 0 5px;
     box-sizing: border-box;}
 .action button{ display: block; width: 100%; height: 38px; background-color: #ffd219; font-size: 20px; border: 2px solid #C7A413}
-.action p{text-align: center;font-size: 15px; font-weight: bold; color: #fff;   text-shadow: 1px 0 0 #ee3614,-1px 0 0 #ee3614,0 1px 0 #ee3614,0 -1px 0 #ee3614;
-}
-.action p strong{color:#ffd219;}
-.action .lu{text-align: center; font-size: 70px; color: #ffd219;  text-shadow: 1px 0 0 #ee3614,-1px 0 0 #ee3614,0 1px 0 #ee3614,0 -1px 0 #ee3614; vertical-align: middle;line-height: 1;}
-.action .lu span{font-size: 16px;color: #fff; vertical-align: middle;}
+.action p{text-align: center;font-size: 15px; font-weight: bold; color: #1d1d1d; text-shadow:1px 1px 0 #fff,-1px -1px 0 #fff,-1px 1px 0 #fff,1px -1px 0 #fff;}
+.action p strong{color:#ee3614;}
+.action .lu{text-align: center; font-size: 70px; color: #1d1d1d; vertical-align: middle;line-height: 1;}
+.action .lu span{font-size: 16px;color: #ee3614; vertical-align: middle;}

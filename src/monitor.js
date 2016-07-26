@@ -88,18 +88,15 @@ class Monitor extends Component {
     const [first = {}, second = {}, third = {}] = this.state.scores;
     return (
       <div className="top_rank">
-        <div className="top">
-          <p className="rank">第一名</p>
-          <p className="name">{first.name}</p>
-          <p className="lu">{first.count}</p>
-        </div>
-        <div className="top">
-          <p className="rank">第二名</p>
+        <div className="top top2">
           <p className="name">{second.name}</p>
           <p className="lu">{second.count}</p>
         </div>
-        <div className="top">
-          <p className="rank">第三名</p>
+        <div className="top top1">
+          <p className="name">{first.name}</p>
+          <p className="lu">{first.count}</p>
+        </div>
+        <div className="top top3">
           <p className="name">{third.name}</p>
           <p className="lu">{third.count}</p>
         </div>
@@ -133,8 +130,8 @@ class Monitor extends Component {
     return (
       <div className="content">
         <div className="on">
-          <p>在线人数</p>
           <strong>{this.state.online}</strong>
+          <p>上车人数</p>
         </div>
         {this.renderTopThree()}
         {this.renderRest()}

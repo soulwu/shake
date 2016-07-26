@@ -100,7 +100,7 @@ class Client extends Component {
           <div>{this.state.error}</div>
         )}
         {this.state.joined && !this.state.started && (
-          <p>{this.props.name}加入成功，活动马上开始！<br />请关注<strong>美丽的主持人</strong>和大屏幕。</p>
+          <p>[{this.props.name}] 加入成功，活动马上开始！<br />请关注<strong>今夏依然美丽的主持人</strong>和大屏幕。</p>
         )}
         {this.state.joined && this.state.started && (
           <div>
