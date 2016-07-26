@@ -10,7 +10,7 @@ body{
 .action{
     width: 100%;
     position: fixed;
-    bottom: 14%;
+    bottom: 40px;
     left: 0;
 }
 .action input{background-color:#fff; font-size: 22px; margin-bottom: 5px;
